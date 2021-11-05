@@ -1,0 +1,49 @@
+settings:
+  daysInHistogram: 90
+  collectResponseTimes: true
+
+  allmonitorsOperational: 'All Systems Operational'
+  notAllmonitorsOperational: 'Not All Systems Operational'
+  monitorLabelOperational: 'Operational'
+  monitorLabelNotOperational: 'Not Operational'
+  monitorLabelNoData: 'No data'
+  dayInHistogramNoData: 'No data'
+  dayInHistogramOperational: 'All good'
+  dayInHistogramNotOperational: ' incident(s)'
+
+monitors:
+  - id: api
+    name: API
+    description: 'A main API.'
+    url: 'https://api.myponyasia.com/api'
+    method: GET
+    expectStatus: 200
+    followRedirect: false
+    linkable: false
+
+  - id: homebase
+    name: Homepage
+    description: 'A homepage of MyPonyAsia.'
+    url: 'https://myponyasia.com'
+    method: GET
+    expectStatus: 200
+    followRedirect: false
+    linkable: true
+
+  - id: pony
+    name: Pony
+    description: 'A pony page of MyPonyAsia.'
+    url: 'https://pony.myponyasia.com'
+    method: GET
+    expectStatus: 200
+    followRedirect: false
+    linkable: true
+
+  - id: anime
+    name: Anime
+    description: 'A anime page of MyPonyAsia.'
+    url: 'https://anime.myponyasia.com'
+    method: GET
+    expectStatus: 200
+    followRedirect: false
+    linkable: true

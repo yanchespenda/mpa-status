@@ -1,9 +1,13 @@
-import React from 'react'
-import config from '../../config.yaml'
+import { KVMonitor, Monitor } from 'config.interface'
+import config from 'config.yaml'
 import MonitorDayAverage from './monitorDayAverage'
 
-export default function MonitorHistogram({ monitorId, kvMonitor }) {
-  // create date and set date - daysInHistogram for the first day of the histogram
+interface IProps {
+  monitorId: string
+  kvMonitor?: KVMonitor
+}
+
+export default function MonitorHistogram({ monitorId, kvMonitor }: IProps) {
   let date = new Date()
   date.setDate(date.getDate() - config.settings.daysInHistogram)
 
@@ -16,7 +20,7 @@ export default function MonitorHistogram({ monitorId, kvMonitor }) {
         const dayInHistogram = date.toISOString().split('T')[0]
 
         let bg = ''
-        let dayInHistogramLabel = config.settings.dayInHistogramNoData
+        let dayInHistogramLabel = 'No data'
 
         // filter all dates before first check, then check the rest
         if (kvMonitor && kvMonitor.firstCheck <= dayInHistogram) {
@@ -25,10 +29,10 @@ export default function MonitorHistogram({ monitorId, kvMonitor }) {
             kvMonitor.checks[dayInHistogram].fails > 0
           ) {
             bg = 'yellow'
-            dayInHistogramLabel = `${kvMonitor.checks[dayInHistogram].fails} ${config.settings.dayInHistogramNotOperational}`
+            dayInHistogramLabel = `${kvMonitor.checks[dayInHistogram].fails} incident(s)`
           } else {
             bg = 'green'
-            dayInHistogramLabel = config.settings.dayInHistogramOperational
+            dayInHistogramLabel = 'All good'
           }
         }
 
@@ -46,6 +50,7 @@ export default function MonitorHistogram({ monitorId, kvMonitor }) {
                 Object.keys(kvMonitor.checks[dayInHistogram].res).map((key) => {
                   return (
                     <MonitorDayAverage
+                      key={key}
                       location={key}
                       avg={kvMonitor.checks[dayInHistogram].res[key].a}
                     />

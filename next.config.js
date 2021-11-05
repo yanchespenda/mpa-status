@@ -1,4 +1,9 @@
+const withYaml = require('next-plugin-yaml')
+
 /** @type {import('next').NextConfig} */
-module.exports = {
+module.exports = withYaml({
   reactStrictMode: true,
-}
+  env: {
+
+  },
+})

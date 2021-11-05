@@ -1,8 +1,19 @@
 import '../styles/globals.scss'
 import type { AppProps } from 'next/app'
+import { SWRConfig } from 'swr'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return (
+    <SWRConfig 
+      value={{
+        refreshInterval: 3000,
+        errorRetryCount: 3,
+        fetcher: (resource, init) => fetch(resource, init).then(res => res.json()).catch(err => err)
+      }}
+    >
+      <Component {...pageProps} />
+    </SWRConfig>
+  )
 }
 
 export default MyApp

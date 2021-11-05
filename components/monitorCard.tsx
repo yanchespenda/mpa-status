@@ -1,6 +1,12 @@
-import config from '../../config.yaml'
 import MonitorStatusLabel from './monitorStatusLabel'
 import MonitorHistogram from './monitorHistogram'
+import { KVMonitor, Monitor } from 'config.interface'
+import config from 'config.yaml'
+
+interface IProps {
+  monitor: Monitor
+  data?: KVMonitor
+}
 
 const infoIcon = (
   <svg
@@ -17,9 +23,9 @@ const infoIcon = (
   </svg>
 )
 
-export default function MonitorCard({ key, monitor, data }) {
+export default function MonitorCard({ monitor, data }: IProps) {
   return (
-    <div key={key} className="card">
+    <div className="w-full rounded-lg bg-black bg-opacity-25 p-4 mb-4">
       <div className="flex flex-row justify-between items-center mb-2">
         <div className="flex flex-row items-center align-center">
           {monitor.description && (
@@ -51,7 +57,7 @@ export default function MonitorCard({ key, monitor, data }) {
       <MonitorHistogram monitorId={monitor.id} kvMonitor={data} />
 
       <div className="flex flex-row justify-between items-center text-gray-400 text-sm">
-        <div>{config.settings.daysInHistogram} days ago</div>
+        <div>{ config.settings.daysInHistogram } days ago</div>
         <div>Today</div>
       </div>
     </div>
