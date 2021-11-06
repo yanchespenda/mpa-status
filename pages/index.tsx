@@ -95,7 +95,7 @@ const Home: NextPage = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Azure App Service
+              Vercel
             </a> {' & '}
             <a
               href="https://firebase.google.com"
