@@ -22,9 +22,14 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
 
+  console.group(`Cron init run`)
+
   // Get Worker PoP and save it to monitorsStateMetadata
   const checkLocation = await getCheckLocation()
+  console.log(`checkLocation`, checkLocation)
+
   const checkDay = getDate()
+  console.log(`checkDay`, checkDay)
 
   let monitorsState: KV | null = null
 
@@ -48,20 +53,25 @@ export default async function handler(
     if (getData.Body) {
       const getDataBody = JSON.parse(getData.Body?.toString()) || null
       monitorsState = getDataBody as KV
+      console.log(`monitorsState:Load S3`, monitorsState)
     }
   } catch (error: any) {
+    console.groupEnd()
     return res.status(500).json({ message: error.message, statusCode: error.statusCode || 500, data: null })
   }
 
   // Create empty state objects if not exists in S3 storage yet
   if (!monitorsState) {
     monitorsState = { lastUpdate: {allOperational: false, loc: undefined, time: undefined}, monitors: {} }
+    console.log(`monitorsState:Create empty`, monitorsState)
   }
 
   // Reset default all monitors state to true
   monitorsState.lastUpdate.allOperational = true
 
   for (const monitor of config.monitors) {
+    console.log(`Checking ${monitor.name} ...`)
+
     // Create default monitor state if does not exist yet
     if (typeof monitorsState.monitors[monitor.id] === 'undefined') {
       monitorsState.monitors[monitor.id] = {
@@ -74,8 +84,6 @@ export default async function handler(
         checks: {},
       }
     }
-
-    console.log(`Checking ${monitor.name} ...`)
 
     // Fetch the monitors URL
     const init: RequestInit = {
@@ -90,6 +98,7 @@ export default async function handler(
     const requestStartTime = Date.now()
     const checkResponse = await fetch(monitor.url, init)
     const requestTime = Math.round(Date.now() - requestStartTime)
+    console.log(`requestTime`, requestTime)
 
     // Determine whether operational and status changed
     const monitorOperational =
@@ -197,10 +206,13 @@ export default async function handler(
 
   try {
     const sendData = await s3.upload(s3ParamsUpload).promise()
-    console.log('sendData', sendData)
+    console.log(`Saving S3`)
   } catch (error: any) {
+    console.groupEnd()
     return res.status(500).json({ message: error.message, statusCode: error.statusCode || 500, data: null })
   }
+
+  console.groupEnd()
 
   return res.status(200).json({ message: 'OK' })
 }
