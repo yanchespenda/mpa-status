@@ -21,9 +21,11 @@ jobs:
         with:
           node-version: '14.x'
 
-      - name: yarn install
+      - name: npm install, build, and test
         run: |
-          yarn install
+          npm install
+          npm run build --if-present
+          npm run test --if-present
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -35,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'production'
+      name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -49,6 +51,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'mpa-status'
-          slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_f1fef2ffa7aa403988abdca3adf76f80 }}
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B9EA2E85B38A415CAE73FB99110A8B8E }}
           package: .
