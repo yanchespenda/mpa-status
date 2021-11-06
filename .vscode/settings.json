@@ -4,5 +4,11 @@
     "**/.pnp.*": true
   },
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "appService.zipIgnorePattern": [
+    "node_modules{,/**}",
+    ".vscode{,/**}"
+  ],
+  "appService.defaultWebAppToDeploy": "/subscriptions/edda8889-a890-422c-b283-f2da054d2976/resourceGroups/DefaultResourceGroup-SEA/providers/Microsoft.Web/sites/mpa-status",
+  "appService.deploySubpath": "."
 }
