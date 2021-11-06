@@ -30,7 +30,11 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: .
+          path: |
+            .
+            !/node_modules
+            !/.yarn
+            !/.next
 
   deploy:
     runs-on: ubuntu-latest
