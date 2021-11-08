@@ -20,7 +20,7 @@ export default function MonitorHistogram({ monitorId, kvMonitor }: IProps) {
         const dayInHistogram = date.toISOString().split('T')[0]
 
         let bg = ''
-        let dayInHistogramLabel = 'No data'
+        let percentageHistogramLabel = 'No record'
 
         // filter all dates before first check, then check the rest
         if (kvMonitor && kvMonitor.firstCheck <= dayInHistogram) {
@@ -29,12 +29,14 @@ export default function MonitorHistogram({ monitorId, kvMonitor }: IProps) {
             kvMonitor.checks[dayInHistogram].fails > 0
           ) {
             bg = 'yellow'
-            dayInHistogramLabel = `${kvMonitor.checks[dayInHistogram].fails} incident(s)`
+            percentageHistogramLabel = `${kvMonitor.checks[dayInHistogram].fails} incident${kvMonitor.checks[dayInHistogram].fails > 1 ? 's' : ''}`
           } else {
             bg = 'green'
-            dayInHistogramLabel = 'All good'
+            percentageHistogramLabel = 'All good'
           }
         }
+
+        const dateFormated = date.getDate()
 
         return (
           <div key={key} className="hitbox tooltip">
@@ -43,19 +45,8 @@ export default function MonitorHistogram({ monitorId, kvMonitor }: IProps) {
               {dayInHistogram}
               <br />
               <span className="font-semibold text-sm">
-                {dayInHistogramLabel}
+                {percentageHistogramLabel}
               </span>
-              {kvMonitor &&
-                kvMonitor.checks.hasOwnProperty(dayInHistogram) &&
-                Object.keys(kvMonitor.checks[dayInHistogram].res).map((key) => {
-                  return (
-                    <MonitorDayAverage
-                      key={key}
-                      location={key}
-                      avg={kvMonitor.checks[dayInHistogram].res[key].a}
-                    />
-                  )
-                })}
             </div>
           </div>
         )

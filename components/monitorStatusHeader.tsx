@@ -1,6 +1,7 @@
 import { KVLastUpdate } from 'config.interface'
 import config from 'config.yaml'
 import { locations } from 'utils/locations'
+import TimeAgo from 'timeago-react'
 
 interface IProps {
   kvMonitorsLastUpdate?: KVLastUpdate
@@ -30,16 +31,19 @@ export default function MonitorStatusHeader({ kvMonitorsLastUpdate, isError, err
     text = config.settings.notAllmonitorsOperational
   }
 
+  console.log('kvMonitorsLastUpdate.time', kvMonitorsLastUpdate)
+
   return (
     <div className={`p-4 mb-4 mt-2 font-semibold rounded-lg ${classes[color]}`}>
       <div className="flex flex-row justify-between items-center">
         <div>{ text }</div>
         {kvMonitorsLastUpdate && kvMonitorsLastUpdate.time && typeof window !== 'undefined' && (
           <div className="text-xs font-light">
-            checked{' '}
-            {Math.round((Date.now() - kvMonitorsLastUpdate.time) / 1000)} sec
-            ago (from{' '}
-            {locations[kvMonitorsLastUpdate.loc as string] || kvMonitorsLastUpdate.loc})
+            last updated{' '}
+            {/* {Math.round((Date.now() - kvMonitorsLastUpdate.time) / 1000)} sec */}
+            <TimeAgo
+              datetime={kvMonitorsLastUpdate.time}
+            />
           </div>
         )}
       </div>
