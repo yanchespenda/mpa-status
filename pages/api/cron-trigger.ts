@@ -149,6 +149,7 @@ export default async function handler(
       !monitorsState.monitors[monitor.id].checks.hasOwnProperty(checkDay)
     ) {
       monitorsState.monitors[monitor.id].checks[checkDay] = {
+        attemps: 0,
         fails: 0,
         res: {},
       }
@@ -191,6 +192,8 @@ export default async function handler(
         monitorsState.monitors[monitor.id].checks[checkDay].fails++
       }
     }
+
+    monitorsState.monitors[monitor.id].checks[checkDay].attemps++
   }
 
   // Save last update information

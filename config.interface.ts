@@ -53,6 +53,7 @@ export interface KVMonitorCheckRes {
 }
 
 export interface KVMonitorCheck {
+  attemps: number
   fails: number
   res: { [key: string]: KVMonitorCheckRes }
 }
