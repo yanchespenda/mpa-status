@@ -103,13 +103,6 @@ const Home: NextPage = () => {
               rel="noopener noreferrer"
             >
               Firebase Storage
-            </a> {' & '}
-            <a
-              href="https://cloudflare.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Cloudflare Worker
             </a>
           </span>
         </div>

@@ -2,6 +2,7 @@ import MonitorStatusLabel from './monitorStatusLabel'
 import MonitorHistogram from './monitorHistogram'
 import { KVMonitor, Monitor } from 'config.interface'
 import config from 'config.yaml'
+import Link from 'next/link'
 
 interface IProps {
   monitor: Monitor
@@ -36,7 +37,12 @@ export default function MonitorCard({ monitor, data }: IProps) {
               </div>
             </div>
           )}
-          {(monitor.linkable === true || monitor.linkable === undefined) ?
+          <Link href={`/detail/${monitor.id}`}>
+            <a>
+              <div className="text-xl">{monitor.name}</div>
+            </a>
+          </Link>
+          {/* {(monitor.linkable === true || monitor.linkable === undefined) ?
             (
               <a href={monitor.url} target="_blank" rel="noreferrer">
                 <div className="text-xl">{monitor.name}</div>
@@ -48,7 +54,7 @@ export default function MonitorCard({ monitor, data }: IProps) {
                 <div className="text-xl">{monitor.name}</div>
               </span>
             )
-          }
+          } */}
 
         </div>
         <MonitorStatusLabel kvMonitor={data} />
