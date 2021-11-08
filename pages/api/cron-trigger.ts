@@ -193,6 +193,10 @@ export default async function handler(
       }
     }
 
+    if (!monitorsState.monitors[monitor.id].checks[checkDay].hasOwnProperty('attemps')) {
+      monitorsState.monitors[monitor.id].checks[checkDay].attemps = 0
+    }
+
     monitorsState.monitors[monitor.id].checks[checkDay].attemps++
   }
 
