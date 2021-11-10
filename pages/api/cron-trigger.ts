@@ -135,13 +135,14 @@ export default async function handler(
     // }
 
     // Send Discord message on monitor change
-    // if (
-    //   monitorStatusChanged &&
-    //   typeof SECRET_DISCORD_WEBHOOK_URL !== 'undefined' &&
-    //   SECRET_DISCORD_WEBHOOK_URL !== 'default-gh-action-secret'
-    // ) {
-    //   event.waitUntil(notifyDiscord(monitor, monitorOperational))
-    // }
+    if (
+      monitorStatusChanged &&
+      typeof process.env.SECRET_DISCORD_WEBHOOK_URL !== 'undefined' &&
+      process.env.SECRET_DISCORD_WEBHOOK_URL !== 'default-gh-action-secret'
+    ) {
+      // event.waitUntil(notifyDiscord(monitor, monitorOperational))
+      notifyDiscord(monitor, monitorOperational)
+    }
 
     // make sure checkDay exists in checks in cases when needed
     if (
@@ -212,7 +213,7 @@ export default async function handler(
   };
 
   try {
-    const sendData = await s3.upload(s3ParamsUpload).promise()
+    await s3.upload(s3ParamsUpload).promise()
     console.log(`Saving S3`)
   } catch (error: any) {
     console.groupEnd()
@@ -222,4 +223,31 @@ export default async function handler(
   console.groupEnd()
 
   return res.status(200).json({ message: 'OK' })
+}
+
+const getOperationalLabel = (operational: any) => {
+  return operational
+    ? config.settings.monitorLabelOperational
+    : config.settings.monitorLabelNotOperational
+}
+
+export async function notifyDiscord(monitor: any, operational: any) {
+  const payload = {
+    embeds: [
+      {
+        title: `${monitor.name} is ${getOperationalLabel(operational)} ${
+          operational ? ':white_check_mark:' : ':x:'
+        }`,
+        description: `\`${monitor.method ? monitor.method : 'GET'} ${
+          monitor.url
+        }\` - :eyes: [Status Page](https://status.myponyasia.com)`,
+        color: operational ? 3581519 : 13632027,
+      },
+    ],
+  }
+  return fetch(process.env.SECRET_DISCORD_WEBHOOK_URL as string, {
+    body: JSON.stringify(payload),
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  })
 }
