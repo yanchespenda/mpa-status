@@ -50,9 +50,11 @@ const Home: NextPage = () => {
             <div className="flex flex-row items-center">
               <img className="h-8 w-auto" src="/logo_web.png" alt="logo" />
             </div>
+            <div className="flex-1"></div>
             <div className="flex flex-row items-center">
-              {/* {typeof window !== 'undefined' && <ThemeSwitcher />}
-              <MonitorFilter active={slash} callback={filterByTerm} /> */}
+              <a href="https://github.com/yanchespenda/mpa-status" target="_blank" rel="noreferrer">
+                <img className="h-8 w-auto" src="/GitHub-Mark-Light-64px.png" alt="logo-github" />
+              </a>
             </div>
           </div>
 
